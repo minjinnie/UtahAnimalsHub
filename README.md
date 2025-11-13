@@ -1,73 +1,39 @@
-# React + TypeScript + Vite
+# 🌲 Utah Animals Hub  
+Discover Utah’s wildlife - beautifully, simply, and interactively.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to **Utah Animals Hub**, a React + TypeScript educational project designed for hikers, students, families, and wildlife enthusiasts.  
+Explore Utah’s native species through powerful filters, clean UI, and real conservation-focused data.
 
-Currently, two official plugins are available:
+Built with love by **Alex Snow, Kevin Dixon, and MJ Sung**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🐾 Animal Encyclopedia  
+- Search animals by **common name, scientific name, or habitat**  
+- Filter by **Animal Type, Habitat, Utah Region**  
+- Click a card → view a full-width detailed profile  
+- ⭐ Mark favorites  
+- Includes taxonomy, diet, weight, conservation status, and more
 
-## Expanding the ESLint configuration
+### 🎨 Clean Natural UI  
+- Ivory + Forest Green theme  
+- Responsive 3-column card layout  
+- Sticky filter sidebar  
+- Custom class-based color chips (Mammals, Fish, Birds, etc.)  
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 🌍 Habitat Shortcuts (Home Page)  
+Click:
+- **Mountains**
+- **Desert**
+- **Forest**
+- **Lakes & Rivers**  
+→ Instantly jumps to the Animals page **with filters auto-applied**.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 💚 Conservation / Donate Page  
+- Curated list of highly respected Utah wildlife organizations  
+- Clean card layout with category chip + corner arrow button  
+- “Why your donation matters” section  
+- All UI styled like a real conservation nonprofit  
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
