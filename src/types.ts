@@ -8,14 +8,16 @@ export type Habitat =
   | "Wetlands"
   | "River"
   | "Canyon"
-  | "Shrubland";
+  | "Shrubland"
+  | "no data found";
 
 export type AnimalClass =
   | "Mammals"
   | "Reptiles & Amphibians"
   | "Birds"
   | "Fishes"
-  | "Invertebrates";
+  | "Invertebrates"
+  | "no data found";
 
 export interface Animal {
   id: string;
