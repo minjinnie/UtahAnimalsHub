@@ -5,7 +5,7 @@ import type { Animal } from '../types';
 // Enhanced with additional web scraping
 // Filtered to keep top 49 animals with most complete data
 
-export const scrapedAnimals: Animal[] = [
+export const animals: Animal[] = [
   {
     id: 'orconectes-virilis',
     commonName: 'Orconectes virilis',
