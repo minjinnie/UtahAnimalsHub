@@ -24,7 +24,7 @@ export function Layout({ activePage, onChangePage, children }: LayoutProps) {
           width: "100%",
           backgroundColor: "#ffffff",
           borderBottom: "1px solid rgba(0,0,0,0.1)",
-          padding: "0.9rem 1.4rem",
+          padding: "0.9rem 0.8rem",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -38,7 +38,7 @@ export function Layout({ activePage, onChangePage, children }: LayoutProps) {
         style={{
             display: "flex",
             alignItems: "center",
-            gap: "0.6rem",
+            gap: "1.35rem",
             fontSize: "1.35rem",
             fontWeight: 700,
             color: "rgba(20, 20, 20, 1)",
@@ -46,7 +46,15 @@ export function Layout({ activePage, onChangePage, children }: LayoutProps) {
             paddingLeft: "14.5rem"
         }}
         >
-        <span style={{ fontSize: "1.6rem" }}>🌲</span>
+        <img
+          src="/src/assets/logo.png"
+          alt="Utah Animals Hub Logo"
+          style={{
+            width: "70px",
+            height: "80px",
+            objectFit: "contain"
+          }}
+        />
         Utah Animals Hub
         </div>
 

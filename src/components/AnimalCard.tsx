@@ -15,7 +15,6 @@ export function AnimalCard({
   onSelect,
   onToggleFavorite
 }: AnimalCardProps) {
-  // category styles (safe fallback)
   const categoryStyles = {
     Mammals: { bg: "#E7F2FF", text: "#1E66D0" },
     Fishes: { bg: "#E8F8F3", text: "#1A7F5A" },
@@ -28,6 +27,8 @@ export function AnimalCard({
       bg: "#EEE",
       text: "#555"
     };
+
+  const mainImage = animal.images?.[0];
 
   return (
     <article
@@ -51,22 +52,23 @@ export function AnimalCard({
         style={{
           position: "relative",
           height: 140,
-          overflow: "hidden"
+          overflow: "hidden",
+          backgroundColor: "#f0f0f0"
         }}
       >
-        {/* Animal Image */}
-        <img
-          src={animal.imageUrl}
-          alt={animal.commonName}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            display: "block"
-          }}
-        />
+        {mainImage && (
+          <img
+            src={mainImage}
+            alt={animal.commonName}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block"
+            }}
+          />
+        )}
 
-        {/* Favorite Star */}
         <button
           type="button"
           onClick={(e) => {
@@ -95,7 +97,6 @@ export function AnimalCard({
           {isFavorite ? "⭐" : "☆"}
         </button>
 
-        {/* NEW: Category chip inside image bottom-right */}
         <span
           style={{
             position: "absolute",
@@ -122,7 +123,6 @@ export function AnimalCard({
           gap: "0.35rem"
         }}
       >
-        {/* Title ONLY (chip removed) */}
         <h3
           style={{
             margin: 0,

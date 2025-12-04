@@ -141,10 +141,13 @@ export function App() {
           isFavorite={favoriteIds.includes(selectedAnimal.id)}
           onToggleFavorite={() => toggleFavorite(selectedAnimal.id)}
           onBack={() => setShowDetail(false)}
+          onSelectAnimal={(id) => {
+            setSelectedAnimalId(id);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
         />
       );
     }
-
     return (
       <div
         style={{

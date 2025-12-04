@@ -36,5 +36,5 @@ export interface Animal {
   description: string;
   classCategory: AnimalClass;
   subSpecies?: string[];
-  imageUrl: string;
+  images?: string[];
 }
