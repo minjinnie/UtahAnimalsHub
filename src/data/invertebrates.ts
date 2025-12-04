@@ -317,7 +317,10 @@ export const invertebratesAnimals: Animal[] = [
     description: 'Adelpha californica, the California sister, is a species of butterfly in the family Nymphalidae. They are common in California, but can also be found in western Nevada and Oregon, as well as in northern Baja California. The upper surfaces of their wings are dark brown to black with wide cream white bands dissecting both wings and two orange patches near the tips of the forewings. The underside is variously colored with browns, blue, orange, and white. A. californica is unpalatable to predators and is part of a large mimicry complex.',
     classCategory: 'Invertebrates',
     subSpecies: [],
-    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/California_Sister_Yosemite.jpg/500px-California_Sister_Yosemite.jpg']
+    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/California_Sister_Yosemite.jpg/500px-California_Sister_Yosemite.jpg',
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3IC1xlEJ4d7cGrK-8ama_O7G9UU37AP3AQQ&s",
+        "https://wildcolumbia.org/wp-content/uploads/2021/12/california-sister.jpg"
+    ]
   },
   {
     id: 'red-rimmed-melania',
@@ -422,7 +425,10 @@ export const invertebratesAnimals: Animal[] = [
     description: 'Aglais milberti, the fire-rim tortoiseshell or Milbert\'s tortoiseshell, is considered the only species of the proposed Aglais genus that occurs in North America. It is one of two tortoiseshell butterflies in North America. The other species is the nymphata californica or California Tortoiseshell (California tortoiseshell). The data is muddled on the range of the two recognized tortoiseshell species. Similar species distributions exist and have separate migration patterns for other butterflies with the same geographical ranges.  Western monarchs, for example, migrate between southern BC, coastal CA and Pacific Mexico. Eastern monarchs can be found east of the Rockies in Canada and migrate along the Eastern American coast into interior Mexican highlands. The mountain ranges are often physical borders between distinct populations and migration. (Danaus plexippus)',
     classCategory: 'Invertebrates',
     subSpecies: [],
-    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Aglais_milberti1.jpg/500px-Aglais_milberti1.jpg']
+    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Aglais_milberti1.jpg/500px-Aglais_milberti1.jpg',
+        'https://fm-digital-assets.fieldmuseum.org/571/787/124038_Aglais_milberti_d_IN.jpg',
+        'https://inaturalist-open-data.s3.amazonaws.com/photos/2105298/large.jpg'
+    ]
   },
   {
     id: 'agrotis-ipsilon',
