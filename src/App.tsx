@@ -76,10 +76,11 @@ export function App() {
          FILTER LOGIC
   ------------------------- */
 
-  const filteredAnimals = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
+const filteredAnimals = useMemo(() => {
+  const query = searchQuery.trim().toLowerCase();
 
-    return animals.filter((animal) => {
+  return animals
+    .filter((animal) => {
       if (showOnlyFavorites && !favoriteIds.includes(animal.id)) return false;
       if (classFilter !== "all" && animal.classCategory !== classFilter) return false;
       if (habitatFilter !== "all" && !animal.habitats.includes(habitatFilter)) return false;
@@ -102,8 +103,11 @@ export function App() {
       }
 
       return target.toLowerCase().includes(query);
-    });
-  }, [searchQuery, searchMode, classFilter, habitatFilter, regionFilter, showOnlyFavorites, favoriteIds]);
+    })
+    .sort((a, b) =>
+      a.commonName.localeCompare(b.commonName)
+    );
+}, [searchQuery, searchMode, classFilter, habitatFilter, regionFilter, showOnlyFavorites, favoriteIds]);
 
   const selectedAnimal: Animal | null =
     filteredAnimals.find((a) => a.id === selectedAnimalId) ??

@@ -199,57 +199,52 @@ function AnimalDetail({
 
           <div
             style={{
-              display: "flex",
-              gap: "1rem",
-              flexWrap: "wrap",
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+              gap: "0.9rem"
             }}
           >
-            {relatedAnimals.map((ra) => (
+            {relatedAnimals.map((animal) => (
               <div
-                key={ra.id}
-                onClick={() => onSelectAnimal(ra.id)}
+                key={animal.id}
+                onClick={() => onSelectAnimal(animal.id)}
                 style={{
-                  width: "150px",
-                  backgroundColor: "#ffffff",
-                  boxShadow: "var(--shadow-soft)",
-                  padding: "0.5rem",
-                  textAlign: "center",
-                  height: "200px",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
                   cursor: "pointer",
+                  backgroundColor: "#ffffff",
+                  borderRadius: "12px",
+                  overflow: "hidden",
+                  boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
+                  transition: "transform 0.2s ease, box-shadow 0.2s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-4px)";
+                  e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.12)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 4px 10px rgba(0,0,0,0.08)";
                 }}
               >
                 <img
-                  src={ra.images?.[0]}
-                  alt={ra.commonName}
+                  src={animal.images?.[0]}
+                  alt={animal.commonName}
                   style={{
                     width: "100%",
-                    height: "110px",
+                    height: "135px",        // ✅ 이미지 높이 조금 키움
                     objectFit: "cover",
-                    borderRadius: "var(--radius-md)",
+                    display: "block"
                   }}
                 />
-                <div>
-                  <p
-                    style={{
-                      margin: "0.4rem 0 0",
-                      fontSize: "0.9rem",
-                      fontWeight: 600,
-                    }}
-                  >
-                    {ra.commonName}
-                  </p>
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: "0.7rem",
-                      color: "var(--color-text-muted)",
-                    }}
-                  >
-                    {ra.scientificName}
-                  </p>
+
+                <div
+                  style={{
+                    padding: "0.4rem 0.6rem",   // ✅ 텍스트 영역 패딩 줄임
+                    fontSize: "0.85rem",
+                    fontWeight: 600,
+                    textAlign: "center"
+                  }}
+                >
+                  {animal.commonName}
                 </div>
               </div>
             ))}
