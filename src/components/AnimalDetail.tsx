@@ -1,4 +1,6 @@
+import { useState } from "react";
 import type { Animal } from "../types";
+import { PhotoProvider, PhotoView } from "react-photo-view";
 
 interface AnimalDetailProps {
   animal: Animal;
@@ -15,6 +17,12 @@ function AnimalDetail({
   onToggleFavorite,
   relatedAnimals
 }: AnimalDetailProps) {
+  const [isImageOpen, setIsImageOpen] = useState(false);
+
+  const openImage = () => {
+    setIsImageOpen(true);
+  }
+
   return (
     <section
       style={{
@@ -51,18 +59,44 @@ function AnimalDetail({
         }}
       >
         {/* Animal Image */}
-        <img
-          src={animal.imageUrl}
-          alt={animal.commonName}
-          style={{
-            width: "360px",
-            height: "360px",
-            objectFit: "cover",
-            borderRadius: "var(--radius-lg)",
-            boxShadow: "var(--shadow-soft)",
-            flexShrink: 0
-          }}
-        />
+        <PhotoProvider>
+          <button 
+            onClick={openImage}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-3px)";
+              e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "var(--shadow-soft)";
+            }}
+            style={{
+              background: 'none',
+              color: 'inherit',
+              border: 'none',
+              padding: 0,
+              font: 'inherit',
+              cursor: 'pointer',
+              outline: 'inherit',
+              height: 0,
+            }}
+          >
+            <PhotoView src={animal.imageUrl}>
+              <img
+                src={animal.imageUrl}
+                alt={animal.commonName}
+                style={{
+                  width: "360px",
+                  height: "360px",
+                  objectFit: "cover",
+                  borderRadius: "var(--radius-lg)",
+                  boxShadow: "var(--shadow-soft)",
+                  flexShrink: 0
+                }}
+              />
+            </PhotoView>
+          </button>
+        </PhotoProvider>
 
         {/* Info Column */}
         <div style={{ flex: 1, minWidth: "280px" }}>

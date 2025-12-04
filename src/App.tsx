@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import "./theme.css";
+import "react-photo-view/dist/react-photo-view.css";
 import { animals } from "./data/animals";
 import type { Animal, AnimalClass, Habitat } from "./types";
 import { Layout } from "./components/Layout";
@@ -324,32 +325,13 @@ export function App() {
                 boxShadow: "var(--shadow-soft)"
               }}
             >
-              Browse All Animals
-            </button>
-
-            <button
-              onClick={() => {
-                resetFilters();
-                setSearchMode("location");
-                setActivePage("animals");
-              }}
-              style={{
-                backgroundColor: "#ebe1cd",
-                color: "#2f6f4e",
-                border: "1px solid rgba(0,0,0,0.15)",
-                padding: "0.55rem 1.3rem",
-                borderRadius: "999px",
-                fontSize: "0.9rem",
-                cursor: "pointer"
-              }}
-            >
-              Search by Utah Location
+              Browse Animals
             </button>
           </div>
         </div>
       </section>
 
-      <section
+      {/* <section
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))",
@@ -391,7 +373,7 @@ export function App() {
             </p>
           </div>
         ))}
-      </section>
+      </section> */}
 
       <section
         style={{
