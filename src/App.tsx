@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import "./theme.css";
 import "react-photo-view/dist/react-photo-view.css";
 import { animals } from "./data/animals";
@@ -14,6 +14,7 @@ export type PageKey = "home" | "animals" | "about" | "donate";
 type SearchMode = "all" | "common" | "scientific" | "location";
 
 export function App() {
+
   const [activePage, setActivePage] = useState<PageKey>("home");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchMode, setSearchMode] = useState<SearchMode>("all");
@@ -22,33 +23,43 @@ export function App() {
   const [regionFilter, setRegionFilter] = useState<string | "all">("all");
   const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
 
-  // favorites saved in localStorage
-  const [favoriteIds, setFavoriteIds] = useLocalStorage<string[]>(
-    "utah-animals-favorites",
-    []
-  );
+  const [favoriteIds, setFavoriteIds] = useLocalStorage<string[]>("utah-animals-favorites", []);
 
-  // selected animal id (for detail page)
-  const [selectedAnimalId, setSelectedAnimalId] = useState<string | null>(
-    animals[0]?.id ?? null
-  );
-
-  // NEW: show full-page detail mode
+  const [selectedAnimalId, setSelectedAnimalId] = useState<string | null>(animals[0]?.id ?? null);
   const [showDetail, setShowDetail] = useState(false);
 
+
+  /* -------------------------
+     HERO CAROUSEL STATE
+  ------------------------- */
+
+  const heroImages = [
+    "https://images.unsplash.com/photo-1434730737257-3e97ad16f4b6?q=80&w=2048&auto=format&fit=crop",
+    "https://plus.unsplash.com/premium_photo-1673264933122-40a42e8f7fb9?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "https://plus.unsplash.com/premium_photo-1675824611971-f012f00cc672?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8dXRhaHxlbnwwfHwwfHx8MA%3D%3D"
+  ];
+
+  const [heroIndex, setHeroIndex] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setHeroIndex((prev) => (prev + 1) % heroImages.length);
+    }, 3000);
+    return () => clearInterval(id);
+  }, []);
+
+  /* -------------------------
+        REGIONS
+  ------------------------- */
+
   const regions = useMemo(
-    () =>
-      Array.from(new Set(animals.flatMap((a) => a.locations))).sort((a, b) =>
-        a.localeCompare(b)
-      ),
+    () => Array.from(new Set(animals.flatMap((a) => a.locations))).sort(),
     []
   );
 
-  const toggleFavorite = (animalId: string) => {
+  const toggleFavorite = (id: string) => {
     setFavoriteIds((prev) =>
-      prev.includes(animalId)
-        ? prev.filter((id) => id !== animalId)
-        : [...prev, animalId]
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
   };
 
@@ -61,61 +72,38 @@ export function App() {
     setSearchMode("all");
   };
 
+  /* -------------------------
+         FILTER LOGIC
+  ------------------------- */
+
   const filteredAnimals = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
 
     return animals.filter((animal) => {
       if (showOnlyFavorites && !favoriteIds.includes(animal.id)) return false;
-
-      if (classFilter !== "all" && animal.classCategory !== classFilter)
-        return false;
-
-      if (habitatFilter !== "all" && !animal.habitats.includes(habitatFilter))
-        return false;
-
-      if (regionFilter !== "all" && !animal.locations.includes(regionFilter))
-        return false;
-
+      if (classFilter !== "all" && animal.classCategory !== classFilter) return false;
+      if (habitatFilter !== "all" && !animal.habitats.includes(habitatFilter)) return false;
+      if (regionFilter !== "all" && !animal.locations.includes(regionFilter)) return false;
       if (!query) return true;
 
       let target = "";
       switch (searchMode) {
         case "common":
-          target = animal.commonName.toLowerCase();
+          target = animal.commonName;
           break;
         case "scientific":
-          target = animal.scientificName.toLowerCase();
+          target = animal.scientificName;
           break;
         case "location":
-          target = (animal.nativeLocation + " " + animal.locations.join(" ")).toLowerCase();
+          target = animal.nativeLocation + " " + animal.locations.join(" ");
           break;
-        case "all":
         default:
-          target = (
-            animal.commonName +
-            " " +
-            animal.scientificName +
-            " " +
-            animal.description +
-            " " +
-            animal.nativeLocation +
-            " " +
-            animal.locations.join(" ")
-          ).toLowerCase();
-          break;
+          target = `${animal.commonName} ${animal.scientificName} ${animal.description} ${animal.nativeLocation}`;
       }
 
-      return target.includes(query);
+      return target.toLowerCase().includes(query);
     });
-  }, [
-    searchQuery,
-    searchMode,
-    classFilter,
-    habitatFilter,
-    regionFilter,
-    showOnlyFavorites,
-    favoriteIds
-  ]);
+  }, [searchQuery, searchMode, classFilter, habitatFilter, regionFilter, showOnlyFavorites, favoriteIds]);
 
   const selectedAnimal: Animal | null =
     filteredAnimals.find((a) => a.id === selectedAnimalId) ??
@@ -128,9 +116,11 @@ export function App() {
       .map((id) => animals.find((a) => a.id === id))
       .filter((a): a is Animal => Boolean(a)) ?? [];
 
-  // ------------------------
-  // ANIMALS PAGE
-  // ------------------------
+
+
+  /* =============================
+        ANIMALS PAGE
+     ============================= */
 
   const renderAnimals = () => {
     if (showDetail && selectedAnimal) {
@@ -148,6 +138,7 @@ export function App() {
         />
       );
     }
+
     return (
       <div
         style={{
@@ -166,7 +157,7 @@ export function App() {
           onClassFilterChange={setClassFilter}
           onHabitatFilterChange={setHabitatFilter}
           onRegionFilterChange={setRegionFilter}
-          onToggleFavorites={() => setShowOnlyFavorites((prev) => !prev)}
+          onToggleFavorites={() => setShowOnlyFavorites((p) => !p)}
           onResetFilters={resetFilters}
         />
 
@@ -178,205 +169,106 @@ export function App() {
             onModeChange={setSearchMode}
           />
 
-          <section
-            aria-label="List of animals"
+          <div style={{ fontSize: "0.8rem", color: "var(--color-text-muted)" }}>
+            Showing {filteredAnimals.length} animals — click a card for details
+          </div>
+
+          <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.6rem",
-              paddingRight: "0.2rem"
+              display: "grid",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              gap: "0.7rem"
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                fontSize: "0.8rem",
-                color: "var(--color-text-muted)"
-              }}
-            >
-              <span>
-                Showing{" "}
-                <strong style={{ color: "var(--color-primary)" }}>
-                  {filteredAnimals.length}
-                </strong>{" "}
-                result{filteredAnimals.length === 1 ? "" : "s"}
-              </span>
-              <span>Click a card to see full details.</span>
-            </div>
-
-            {filteredAnimals.length === 0 ? (
-              <div
-                style={{
-                  padding: "0.9rem",
-                  borderRadius: "var(--radius-lg)",
-                  backgroundColor: "var(--color-bg-soft)",
-                  border: "var(--border-soft)",
-                  fontSize: "0.85rem"
+            {filteredAnimals.map((animal) => (
+              <AnimalCard
+                key={animal.id}
+                animal={animal}
+                isSelected={selectedAnimal?.id === animal.id}
+                isFavorite={favoriteIds.includes(animal.id)}
+                onSelect={() => {
+                  setSelectedAnimalId(animal.id);
+                  setShowDetail(true);
                 }}
-              >
-                No animals match these filters yet.
-              </div>
-            ) : (
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  gap: "0.7rem"
-                }}
-              >
-                {filteredAnimals.map((animal) => (
-                  <AnimalCard
-                    key={animal.id}
-                    animal={animal}
-                    isSelected={selectedAnimal?.id === animal.id}
-                    isFavorite={favoriteIds.includes(animal.id)}
-                    onSelect={() => {
-                      setSelectedAnimalId(animal.id);
-                      setShowDetail(true); // NEW: open full detail page
-                    }}
-                    onToggleFavorite={() => toggleFavorite(animal.id)}
-                  />
-                ))}
-              </div>
-            )}
-          </section>
+                onToggleFavorite={() => toggleFavorite(animal.id)}
+              />
+            ))}
+          </div>
         </div>
       </div>
     );
   };
 
-  // ------------------------
-  // HOME PAGE
-  // ------------------------
+
+  /* =============================
+        HOME PAGE
+     ============================= */
 
   const renderHome = () => {
-  const featured = animals.slice(0, 4);
+    const featured = animals.slice(0, 4);
 
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "1.8rem" }}>
-      <section
-        style={{
-          width: "100%",
-          height: "260px",
-          overflow: "hidden",
-          position: "relative",
-          boxShadow: "var(--shadow-soft)"
-        }}
-      >
-        <img
-          src="https://images.unsplash.com/photo-1434730737257-3e97ad16f4b6?q=80&w=2048&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="Utah landscape"
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: "1.8rem" }}>
+
+        {/* HERO CAROUSEL */}
+        <section
           style={{
             width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            filter: "brightness(88%)"
-          }}
-        />
-
-        <div
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            textAlign: "center",
-            color: "#ffffff",
-            width: "80%"
+            height: "400px",
+            overflow: "hidden",
+            position: "relative",
+            boxShadow: "var(--shadow-soft)"
           }}
         >
-          <h1
-            style={{
-              margin: 0,
-              fontSize: "2rem",
-              textShadow: "0 2px 6px rgba(0,0,0,0.35)"
-            }}
-          >
-            Discover Utah’s Wildlife
-          </h1>
-
-          <p
-            style={{
-              marginTop: "0.6rem",
-              fontSize: "1rem",
-              textShadow: "0 2px 6px rgba(0,0,0,0.35)"
-            }}
-          >
-            Explore mammals, birds, fish, reptiles, amphibians, and more living across Utah.
-          </p>
+          {heroImages.map((img, index) => (
+            <img
+              key={img}
+              src={img}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                opacity: heroIndex === index ? 1 : 0,
+                transition: "opacity 1s ease-in-out",
+                filter: "brightness(80%)"
+              }}
+            />
+          ))}
 
           <div
             style={{
-              marginTop: "0.8rem",
+              position: "absolute",
+              inset: 0,
               display: "flex",
+              flexDirection: "column",
               justifyContent: "center",
-              gap: "0.7rem",
-              flexWrap: "wrap"
+              alignItems: "center",
+              color: "#ffffff",
+              textAlign: "center"
             }}
           >
+            <h1 style={{ fontSize: "2rem", textShadow: "0 3px 8px rgba(0,0,0,0.35)" }}>
+              Discover Utah's Wildlife
+            </h1>
+
             <button
               onClick={() => setActivePage("animals")}
               style={{
+                marginTop: "0.8rem",
                 backgroundColor: "#567c61ff",
                 color: "#fff",
                 border: "none",
-                padding: "0.55rem 1.3rem",
+                padding: "0.6rem 1.4rem",
                 borderRadius: "999px",
-                fontSize: "0.9rem",
-                cursor: "pointer",
-                boxShadow: "var(--shadow-soft)"
+                cursor: "pointer"
               }}
             >
               Browse Animals
             </button>
           </div>
-        </div>
-      </section>
-
-      {/* <section
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))",
-          gap: "1rem"
-        }}
-      >
-        {[
-          {
-            title: "For hikers & travelers",
-            text: "See where animals live so you can explore Utah safely and respectfully.",
-            icon: "🗺️"
-          },
-          {
-            title: "For students & teachers",
-            text: "Scientific names, taxonomy, and habitat info for school projects.",
-            icon: "📘"
-          },
-          {
-            title: "For wildlife lovers",
-            text: "Learn about conservation, behavior, related species, and more.",
-            icon: "🌿"
-          }
-        ].map((info) => (
-          <div
-            key={info.title}
-            style={{
-              backgroundColor: "#ffffffff",
-              padding: "1.1rem 1.3rem",
-              boxShadow: "var(--shadow-soft)",
-              border: "var(--border-soft)"
-            }}
-          >
-            <div style={{ fontSize: "1.6rem" }}>{info.icon}</div>
-            <h3 style={{ margin: "0.4rem 0", fontSize: "1rem", color: "#2f6f4e" }}>
-              {info.title}
-            </h3>
-            <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--color-text-muted)" }}>
-              {info.text}
-            </p>
-          </div>
-        ))}
-      </section> */}
+        </section>
 
       <section
         style={{
@@ -474,7 +366,7 @@ export function App() {
 
     </div>
   );
-};
+  };
 
 
   // ------------------------
@@ -942,7 +834,12 @@ const renderDonate = () => {
 
   const handleChangePage = (page: PageKey) => {
     setActivePage(page);
+
+    if (page !== "animals") {
+      setShowDetail(false);
+    }
   };
+
 
   return (
     <Layout activePage={activePage} onChangePage={handleChangePage}>
@@ -951,5 +848,6 @@ const renderDonate = () => {
       {activePage === "about" && renderAbout()}
       {activePage === "donate" && renderDonate()}
     </Layout>
-  );
+);
 }
+
