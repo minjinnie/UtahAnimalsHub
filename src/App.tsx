@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import "./theme.css";
-import { animals } from "./data/scraped_animals_narrow";
+import { animals } from "./data/animals";
 import type { Animal, AnimalClass, Habitat } from "./types";
 import { Layout } from "./components/Layout";
 import { SearchBar } from "./components/SearchBar";

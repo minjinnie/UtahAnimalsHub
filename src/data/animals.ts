@@ -1,7 +1,40 @@
 import type { Animal } from "../types";
 
+// Import animals by class from scraping output
+import { birdsAnimals } from "./birds";
+import { fishesAnimals } from "./fishes";
+import { invertebratesAnimals } from "./invertebrates";
+import { mammalsAnimals } from "./mammals";
+import { reptilesamphibiansAnimals } from "./reptiles_and_amphibians";
+
+// Combine all animals into one array
 export const animals: Animal[] = [
-  {
+  ...birdsAnimals,
+  ...fishesAnimals,
+  ...invertebratesAnimals,
+  ...mammalsAnimals,
+  ...reptilesamphibiansAnimals
+];
+
+// Export animals grouped by class for filtered views
+export const animalsByClass = {
+  Birds: birdsAnimals,
+  Fishes: fishesAnimals,
+  Invertebrates: invertebratesAnimals,
+  Mammals: mammalsAnimals,
+  "Reptiles & Amphibians": reptilesamphibiansAnimals
+};
+
+// Export counts
+export const animalCounts = {
+  total: animals.length,
+  birds: birdsAnimals.length,
+  fishes: fishesAnimals.length,
+  invertebrates: invertebratesAnimals.length,
+  mammals: mammalsAnimals.length,
+  reptilesAndAmphibians: reptilesamphibiansAnimals.length
+};
+/*
     id: "american-pika",
     commonName: "American Pika",
     scientificName: "Ochotona princeps",
@@ -352,3 +385,4 @@ export const animals: Animal[] = [
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq59pNAz0LuNAkh51-fblnvYg-oOPGUdCDLQ&s"
     }
 ];
+*/
